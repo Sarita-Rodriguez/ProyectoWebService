@@ -1,43 +1,76 @@
-const express = require('express');
+import express from 'express';
+
 const app = express();
+const port = 3000; 
+
 app.use(express.json());
 
-let libros = [
-  { id: 1, titulo: "Cien años de soledad", autor: "Gabriel García Márquez" },
-  { id: 2, titulo: "1984", autor: "George Orwell" }
+let libros1 = [
+  { id: 1, titulo: 'Cien años de soledad', autor: 'Gabriel García Márquez' },
+  { id: 2, titulo: '1984', autor: 'George Orwell' }
 ];
 
-// 1. GET /libros
-app.get('/libros', (req, res) => {
-  const { autor } = req.query;
+let libros2 = [
+  { id: 1, titulo: 'Rayuela', autor: 'Julio Cortázar' },
+  { id: 2, titulo: 'El nombre del viento', autor: 'Patrick Rothfuss' }
+];
+
+let libros3 = [
+  { id: 1, titulo: 'Los miserables', autor: 'Victor Hugo' },
+  { id: 2, titulo: 'El principito', autor: 'Antoine de Saint-Exupéry' },
+  { id: 3, titulo: 'Crimen y castigo', autor: 'Fiódor Dostoyevski' },
+  { id: 4, titulo: 'Fahrenheit 451', autor: 'Ray Bradbury' }
+];
+
+let libros4 = [
+  { id: 1, titulo: 'Orgullo y prejuicio', autor: 'Jane Austen' },
+  { id: 2, titulo: 'La sombra del viento', autor: 'Carlos Ruiz Zafón' },
+  { id: 3, titulo: 'Matar a un ruiseñor', autor: 'Harper Lee' },
+  { id: 4, titulo: 'Don Quijote de la Mancha', autor: 'Miguel de Cervantes' }
+];
+
+let libros5 = [
+  { id: 1, titulo: 'Fundación', autor: 'Isaac Asimov' },
+  { id: 2, titulo: 'Neuromante', autor: 'William Gibson' },
+  { id: 3, titulo: 'El señor de los anillos', autor: 'J.R.R. Tolkien' },
+  { id: 4, titulo: 'Dune', autor: 'Frank Herbert' }
+];
+
+// GET /libros1 - Buscar por autor o mostrar todos
+app.get('/libros1', (req, res) => {
+  const autor = req.query.autor;
+  const data = libros1;
   if (autor) {
-    const filtrados = libros.filter(libro => libro.autor.toLowerCase().includes(autor.toLowerCase()));
+    const filtrados = data.filter(libro =>
+      libro.autor.toLowerCase().includes(autor.toLowerCase())
+    );
     return res.json(filtrados);
   }
-  res.json(libros);
+  res.json(data);
 });
 
-// 2. GET /libros/:id
-app.get('/libros/:id', (req, res) => {
-  const libro = libros.find(l => l.id == req.params.id);
-  if (!libro) return res.status(404).json({ mensaje: "Libro no encontrado" });
+// GET /libros2/:id - Obtener libro por ID
+app.get('/libros2/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const libro = libros2.find(libro => libro.id === id);
+  if (!libro) return res.status(404).send('Libro no encontrado');
   res.json(libro);
 });
 
-// 3. POST /libros
-app.post('/libros', (req, res) => {
+// POST /libros3 - Agregar nuevo libro
+app.post('/libros3', (req, res) => {
   const { titulo, autor } = req.body;
-  if (!titulo || !autor) return res.status(400).json({ mensaje: "Título y autor son obligatorios" });
-
-  const nuevo = { id: libros.length + 1, titulo, autor };
-  libros.push(nuevo);
-  res.status(201).json(nuevo);
+  if (!titulo || !autor) return res.status(400).send('Faltan datos');
+  const nuevoLibro = { id: libros3.length + 1, titulo, autor };
+  libros3.push(nuevoLibro);
+  res.status(201).json(nuevoLibro);
 });
 
-// 4. PUT /libros/:id
-app.put('/libros/:id', (req, res) => {
-  const libro = libros.find(l => l.id == req.params.id);
-  if (!libro) return res.status(404).json({ mensaje: "Libro no encontrado" });
+// PUT /libros4/:id - Actualizar libro
+app.put('/libros4/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const libro = libros4.find(libro => libro.id === id);
+  if (!libro) return res.status(404).send('Libro no encontrado');
 
   const { titulo, autor } = req.body;
   if (titulo) libro.titulo = titulo;
@@ -46,13 +79,15 @@ app.put('/libros/:id', (req, res) => {
   res.json(libro);
 });
 
-// 5. DELETE /libros/:id
-app.delete('/libros/:id', (req, res) => {
-  const index = libros.findIndex(l => l.id == req.params.id);
-  if (index === -1) return res.status(404).json({ mensaje: "Libro no encontrado" });
-
-  libros.splice(index, 1);
-  res.json({ mensaje: "Libro eliminado" });
+// DELETE /libros5/:id - Eliminar libro
+app.delete('/libros5/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const index = libros5.findIndex(libro => libro.id === id);
+  if (index === -1) return res.status(404).send('Libro no encontrado');
+  libros5.splice(index, 1);
+  res.status(204).send();
 });
 
-app.listen(3000, () => console.log("Servidor corriendo en puerto 3000"));
+app.listen(port, () => {
+  console.log(`✅ Servidor corriendo en http://localhost:${port}`);
+});
