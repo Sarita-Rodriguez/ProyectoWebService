@@ -1,13 +1,13 @@
-from node :20-alpine3.18
+FROM node:20-alpine3.18
 
 WORKDIR /app
 
 COPY package.json .
 
-RUN npm i 
+RUN npm install
 
 COPY index.js .
 
 EXPOSE 3000
 
-CMD ["node","index.js"]
+CMD ["node", "index.js"]
