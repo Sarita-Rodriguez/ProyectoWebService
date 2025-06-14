@@ -1,0 +1,20 @@
+{
+  "name": "hola",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.21.4",
+    "npm-run-all2": "^6.2.0",
+    "open": "^10.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.4",
+    "dotenv": "^16.5.0",
+    "hono": "^4.7.11",
+    "mariadb": "^3.4.2"
+  }
+}
